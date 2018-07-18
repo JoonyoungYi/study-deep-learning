@@ -94,11 +94,17 @@ Var[w] = 2 / fan_in
 
 * PReLU(=leaky ReLU)의 경우에는 분산을 다음과 같이 맞춰야 함.
   * 식 15에서 알 수 있고, 증명 과정도 논문에 나와있음.
+  * a = 0을 넣으면 ReLU 초기화 식과 같아진 다는 것을 알 수 있음.
+  * a = 1을 넣으면 linear activation이므로 Xavier initialization과 동일하게 된다는 것을 알 수 있음.
 
 ```
 Var[w] = 2 / (fan_in * (1 + a^2))
 ```
 
+* 첫 번째 layer에 대해서는 Xavier initialization으로 초기화 하는 것이 합당함. 
+  * 왜냐하면, ReLU activation을 거친 output이 layer의 input이 아니기 때문.
+  * 하지만, 논문에서는 굳이 그렇게까지는 안해도 된다고 표현함.
+  * 간결함을 위해 모두 He initialization으로 초기화 해도 무방하다고 말하고 있음.
 * 역시 He initialization도 분산만 맞추면 되므로, uniform인지 normal인지는 별로 중요치 않음. 
   * Keras implementation도 그래서 두 가지 버전이 존재.
     * uniform: https://www.tensorflow.org/api_docs/python/tf/keras/initializers/he_uniform
